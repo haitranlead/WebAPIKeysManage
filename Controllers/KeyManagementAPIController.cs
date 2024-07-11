@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using WebAPIKeysManage.Models;
 
@@ -27,7 +26,6 @@ namespace WebAPIKeysManage.Controllers
         {
             return Ok(keys);
         }
-
 
         [HttpGet("validate/{key}")]
         public IActionResult ValidateKey(string key)
