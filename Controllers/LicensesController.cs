@@ -2,22 +2,22 @@
 using System.Text;
 using WebAPIKeysManage.Models;
 
-namespace WebAPIKeysManage.Controllers
+namespace WebApiKeysManage.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class KeyManagementAPIController : ControllerBase
+    public class LicensesController : ControllerBase
     {
-        private static List<ApiKey> keys = new List<ApiKey>
+        private static List<License> keys = new List<License>
         {
-            new ApiKey { Key = "ADMIN-DEF46-GHI78-JKL01", IsActive = true, ExpirationDate = DateTime.UtcNow.AddMonths(1) }
+            new License { Key = "ADMIN-DEF46-GHI78-JKL01", IsActive = true, ExpirationDate = DateTime.UtcNow.AddMonths(1) }
         };
 
         [HttpGet("generate")]
         public IActionResult GenerateKey()
         {
-            var newKey = GenerateApiKey();
-            keys.Add(new ApiKey { Key = newKey, IsActive = true, ExpirationDate = DateTime.UtcNow.AddMonths(1) });
+            var newKey = GenerateApiKeys();
+            keys.Add(new License { Key = newKey, IsActive = true, ExpirationDate = DateTime.UtcNow.AddMonths(1) });
             return Ok(new { key = newKey });
         }
 
@@ -30,8 +30,8 @@ namespace WebAPIKeysManage.Controllers
         [HttpGet("validate/{key}")]
         public IActionResult ValidateKey(string key)
         {
-            var apiKey = keys.FirstOrDefault(k => k.Key == key);
-            if (apiKey != null && apiKey.IsActive && apiKey.ExpirationDate > DateTime.UtcNow)
+            var ApiKeys = keys.FirstOrDefault(k => k.Key == key);
+            if (ApiKeys != null && ApiKeys.IsActive && ApiKeys.ExpirationDate > DateTime.UtcNow)
             {
                 return Ok(new { isValid = true });
             }
@@ -41,10 +41,10 @@ namespace WebAPIKeysManage.Controllers
         [HttpPost("revoke")]
         public IActionResult RevokeKey([FromBody] string key)
         {
-            var apiKey = keys.FirstOrDefault(k => k.Key == key);
-            if (apiKey != null)
+            var ApiKeys = keys.FirstOrDefault(k => k.Key == key);
+            if (ApiKeys != null)
             {
-                apiKey.IsActive = false;
+                ApiKeys.IsActive = false;
                 return Ok(new { success = true });
             }
             return Ok(new { success = false });
@@ -53,16 +53,16 @@ namespace WebAPIKeysManage.Controllers
         [HttpPost("extend")]
         public IActionResult ExtendKey([FromBody] string key)
         {
-            var apiKey = keys.FirstOrDefault(k => k.Key == key);
-            if (apiKey != null)
+            var ApiKeys = keys.FirstOrDefault(k => k.Key == key);
+            if (ApiKeys != null)
             {
-                apiKey.ExpirationDate = DateTime.UtcNow.AddMonths(1);
+                ApiKeys.ExpirationDate = DateTime.UtcNow.AddMonths(1);
                 return Ok(new { success = true });
             }
             return Ok(new { success = false });
         }
 
-        private static string GenerateApiKey(int length = 20)
+        private static string GenerateApiKeys(int length = 20)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var random = new Random();

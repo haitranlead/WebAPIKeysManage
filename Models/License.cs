@@ -1,6 +1,6 @@
 ﻿namespace WebAPIKeysManage.Models
 {
-    public class ApiKey
+    public class License
     {
         public string Key { get; set; }
         public bool IsActive { get; set; }
